@@ -20,14 +20,14 @@ body {
   margin: 0;
   min-width: 320px;
   background:
-    radial-gradient(circle at 12% 18%, rgba(73, 103, 211, 0.14), transparent 28rem),
+    radial-gradient(
+      circle at 12% 18%,
+      rgba(73, 103, 211, 0.14),
+      transparent 28rem
+    ),
     linear-gradient(145deg, #f8faff 0%, #eef2f9 100%);
   color: var(--ink);
-  font-family:
-    Arial,
-    "Apple SD Gothic Neo",
-    "Noto Sans KR",
-    sans-serif;
+  font-family: Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
 }
 
 button,
@@ -95,14 +95,16 @@ input {
 .input-row input {
   min-width: 0;
   flex: 1;
-  height: 52px;
+  min-height: 52px;
   padding: 0 16px;
   border: 1px solid var(--line);
   border-radius: 10px;
   outline: none;
   color: var(--ink);
   background: #fff;
-  transition: border-color 160ms ease, box-shadow 160ms ease;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
 }
 
 .input-row input::placeholder {
@@ -133,7 +135,9 @@ input {
   color: #fff;
   font-weight: 700;
   cursor: pointer;
-  transition: background 160ms ease, transform 160ms ease;
+  transition:
+    background 160ms ease,
+    transform 160ms ease;
 }
 
 .input-row button:hover:not(:disabled) {
