@@ -1,4 +1,4 @@
-import { findUrlByShortCode } from "../../lib/db";
+import { getOriginalUrl } from "../../lib/cache";
 import { recordClick } from "../../lib/stats";
 
 export async function GET(request, { params }) {
@@ -6,7 +6,7 @@ export async function GET(request, { params }) {
 
   const t0 = performance.now();
 
-  const originalUrl = await findUrlByShortCode(shortCode);
+  const { originalUrl, cacheStatus } = await getOriginalUrl(shortCode);
 
   const t1 = performance.now();
 
@@ -19,17 +19,17 @@ export async function GET(request, { params }) {
     return new Response("Not Found", { status: 404 });
   }
 
-  let t2;
-
   try {
     await recordClick(shortCode);
   } catch (error) {
     console.error("Failed to record click", { shortCode });
-  } finally {
-    t2 = performance.now();
   }
 
+  const t2 = performance.now();
+
   console.log({
+    shortCode,
+    cacheStatus,
     lookupMs: (t1 - t0).toFixed(1), // originalUrl 조회 완료까지의 시간
     updateMs: (t2 - t1).toFixed(1), // clickCount 업데이터 완료까지의 시간
     totalMs: (t2 - t0).toFixed(1), // 두 DB 작업에 사용된 전체 시간
@@ -40,6 +40,7 @@ export async function GET(request, { params }) {
     headers: {
       Location: originalUrl,
       "Cache-Control": "no-store",
+      "X-Cache": cacheStatus,
     },
   });
 }
